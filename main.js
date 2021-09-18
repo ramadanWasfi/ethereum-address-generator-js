@@ -1,5 +1,7 @@
 // Add imports here
 const BIP39 = require("bip39");
+const hdkey = require("ethereumjs-wallet/hdkey");
+const Wallet = require("ethereumjs-wallet");
 
 // Add functions here
 const generateMnemonic = () => {
@@ -22,6 +24,24 @@ const generateSeed = (mnemonic) => {
 let seed = generateSeed(Mnemonic);
 
 console.log(seed);
+
+const generatePrivKey = (mnemonic) => {
+  let seed = generateSeed(mnemonic);
+  return hdkey
+    .fromMasterSeed(seed)
+    .derivePath(`m/44'/60'/0'/0/0`)
+    .getWallet()
+    .getPrivateKey();
+};
+
+let privateKey = generatePrivKey(Mnemonic);
+
+console.log(privateKey);
+
+const derivePubKey = (privKey) => {
+  let wallet = Wallet.fromPrivateKey(privKey);
+  return wallet.getPublicKey();
+};
 /*
 
 Do not edit code below this line.
